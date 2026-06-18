@@ -21,7 +21,7 @@ function App() {
   const [selectedServiceId, setSelectedServiceId] = useState(() => {
     const hash = window.location.hash.replace('#', '');
     if (hash.startsWith('service-detail-')) {
-      return parseInt(hash.replace('service-detail-', ''), 10);
+      return hash.replace('service-detail-', '');
     }
     return null;
   });
@@ -35,7 +35,7 @@ function App() {
     const handleHashChange = () => {
       const hash = window.location.hash.replace('#', '');
       if (hash.startsWith('service-detail-')) {
-        setSelectedServiceId(parseInt(hash.replace('service-detail-', ''), 10));
+        setSelectedServiceId(hash.replace('service-detail-', ''));
         setCurrentView('service-detail');
       } else {
         const validViews = ['homepage', 'about', 'contact', 'dashboard', 'editor', 'history'];
