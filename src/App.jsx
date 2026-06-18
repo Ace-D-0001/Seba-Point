@@ -12,12 +12,52 @@ import InvoiceHistory from './components/InvoiceHistory';
 import { Wifi, WifiOff } from 'lucide-react';
 
 function App() {
-  const [currentView, setCurrentView] = useState('homepage'); // 'homepage', 'about', 'contact', 'service-detail', 'dashboard', 'editor', 'history'
-  const [selectedServiceId, setSelectedServiceId] = useState(null);
+  const [currentView, setCurrentView] = useState(() => {
+    const hash = window.location.hash.replace('#', '');
+    if (hash.startsWith('service-detail-')) return 'service-detail';
+    const validViews = ['homepage', 'about', 'contact', 'dashboard', 'editor', 'history'];
+    return validViews.includes(hash) ? hash : 'homepage';
+  });
+  const [selectedServiceId, setSelectedServiceId] = useState(() => {
+    const hash = window.location.hash.replace('#', '');
+    if (hash.startsWith('service-detail-')) {
+      return parseInt(hash.replace('service-detail-', ''), 10);
+    }
+    return null;
+  });
   const [invoices, setInvoices] = useState([]);
   const [selectedInvoice, setSelectedInvoice] = useState(null); // Invoice object for editing
   const [dbState, setDbState] = useState('connecting'); // 'connecting', 'connected', 'error'
   const [errorMessage, setErrorMessage] = useState('');
+
+  // Sync hash changes from browser (back/forward buttons)
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash.replace('#', '');
+      if (hash.startsWith('service-detail-')) {
+        setSelectedServiceId(parseInt(hash.replace('service-detail-', ''), 10));
+        setCurrentView('service-detail');
+      } else {
+        const validViews = ['homepage', 'about', 'contact', 'dashboard', 'editor', 'history'];
+        if (validViews.includes(hash)) {
+          setCurrentView(hash);
+        } else if (!hash) {
+          setCurrentView('homepage');
+        }
+      }
+    };
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
+
+  // Update hash when view changes
+  useEffect(() => {
+    if (currentView === 'service-detail' && selectedServiceId) {
+      window.history.replaceState(null, '', `#service-detail-${selectedServiceId}`);
+    } else {
+      window.history.replaceState(null, '', `#${currentView}`);
+    }
+  }, [currentView, selectedServiceId]);
 
   // Fetch all invoices from backend
   const fetchInvoices = async () => {
