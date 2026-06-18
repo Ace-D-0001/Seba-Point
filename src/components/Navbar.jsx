@@ -116,13 +116,70 @@ function Navbar({ currentView, onNavigate }) {
           </button>
         </nav>
 
-        {/* Mobile Menu Toggle (Simplified placeholder for responsivness) */}
-        <div className="mobile-toggle" style={{ display: 'none' }}>
-           <Menu size={28} color="#16a34a" cursor="pointer" />
+        {/* Mobile Menu Toggle */}
+        <div className="mobile-toggle" style={{ display: 'none' }} onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+           {mobileMenuOpen ? <X size={28} color="#ef4444" cursor="pointer" /> : <Menu size={28} color="#16a34a" cursor="pointer" />}
         </div>
 
       </div>
       
+      {/* Mobile Drawer Menu */}
+      {mobileMenuOpen && (
+        <div style={{
+          position: 'absolute',
+          top: '100%',
+          left: 0,
+          right: 0,
+          backgroundColor: 'white',
+          borderBottom: '1px solid rgba(22, 163, 74, 0.1)',
+          padding: '1.5rem 2rem',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '1rem',
+          boxShadow: '0 10px 15px -3px rgba(0,0,0,0.05)',
+          zIndex: 999
+        }}>
+          {navLinks.map((link) => (
+            <a 
+              key={link.id}
+              href={`#${link.id}`} 
+              onClick={(e) => { e.preventDefault(); setMobileMenuOpen(false); onNavigate(link.id); }}
+              style={{
+                textDecoration: 'none',
+                color: currentView === link.id ? '#16a34a' : '#475569',
+                fontWeight: currentView === link.id ? 700 : 500,
+                fontSize: '1.1rem',
+                padding: '0.5rem 0',
+                borderBottom: '1px solid #f1f5f9'
+              }}
+            >
+              {link.label}
+            </a>
+          ))}
+          <button 
+            onClick={() => { setMobileMenuOpen(false); onNavigate('dashboard'); }}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '0.5rem',
+              backgroundColor: '#ef4444',
+              color: 'white',
+              border: 'none',
+              padding: '0.75rem 1.5rem',
+              borderRadius: '50px',
+              fontWeight: 600,
+              cursor: 'pointer',
+              marginTop: '0.5rem'
+            }}
+          >
+            <Shield size={16} />
+            <span>Billing Portal</span>
+            <ExternalLink size={14} />
+          </button>
+        </div>
+      )}
+
       {/* Basic responsive styles via injected style block to hide desktop nav on small screens */}
       <style>{`
         @media (max-width: 768px) {
