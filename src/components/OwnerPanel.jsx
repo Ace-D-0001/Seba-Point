@@ -1,27 +1,31 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate, Link, Outlet, useLocation } from 'react-router-dom';
-import { FileSpreadsheet, BarChart3, Users, Settings, LogOut, Home, Menu, X as CloseIcon } from 'lucide-react';
+import { FileSpreadsheet, BarChart3, Users, Settings, LogOut, Home } from 'lucide-react';
 
 function OwnerPanel({ user, onLogout, settings }) {
   const navigate = useNavigate();
   const location = useLocation();
   const pathname = location.pathname;
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const siteLogo = settings?.logo || '/logo.png';
   const siteName = settings?.siteName || 'SebaPoint';
 
+  // Check which tab is currently active
+  const isBillingActive = pathname === '/owner-panel' || pathname.startsWith('/owner-panel/invoices');
+  const isStatsActive = pathname === '/owner-panel/stats';
+  const isEmployeesActive = pathname === '/owner-panel/employees';
+  const isCmsActive = pathname.startsWith('/owner-panel/cms');
+
   const NavItem = ({ to, icon: Icon, label, isActive }) => (
     <Link 
       to={to}
-      onClick={() => setIsSidebarOpen(false)}
       style={{
         display: 'flex', alignItems: 'center', gap: '0.75rem', width: '100%', padding: '1rem 1.25rem', 
         border: 'none', borderRadius: '12px',
-        backgroundColor: isActive ? 'rgba(239, 68, 68, 0.1)' : 'transparent', 
+        backgroundColor: isActive ? 'rgba(239, 68, 68, 0.08)' : 'transparent', 
         color: isActive ? '#ef4444' : '#475569',
         fontWeight: isActive ? 700 : 600, cursor: 'pointer', textAlign: 'left', 
-        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+        transition: 'all 0.2s ease',
         textDecoration: 'none',
         position: 'relative',
         overflow: 'hidden'
@@ -38,44 +42,13 @@ function OwnerPanel({ user, onLogout, settings }) {
   );
 
   return (
-    <div style={{
-      minHeight: '100vh',
-      backgroundColor: '#f8fafc',
-      fontFamily: 'system-ui, -apple-system, sans-serif'
-    }}>
+    <div className="owner-shell">
       
       {/* Top Banner (Glassmorphism Deep Red Theme) */}
-      <div style={{
-        background: 'rgba(69, 10, 10, 0.95)',
-        backdropFilter: 'blur(12px)',
-        color: '#ffffff',
-        padding: '0.85rem 2rem',
-        borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
-        position: 'sticky',
-        top: 0,
-        zIndex: 1000,
-        boxShadow: '0 4px 20px rgba(0,0,0,0.1)'
-      }} className="no-print">
-        <div style={{ maxWidth: '1400px', margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '1rem' }}>
+      <header className="owner-header no-print">
+        <div className="owner-header-inner">
           
           <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-            <button 
-              onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-              className="md-menu-toggle"
-              style={{
-                background: 'none',
-                border: 'none',
-                color: 'white',
-                cursor: 'pointer',
-                padding: '0.25rem',
-                display: 'none', // Shown on mobile via CSS media query
-                alignItems: 'center',
-                justifyContent: 'center'
-              }}
-            >
-              {isSidebarOpen ? <CloseIcon size={24} /> : <Menu size={24} />}
-            </button>
-            
             <div style={{ backgroundColor: 'white', padding: '0.3rem', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <img src={siteLogo} alt={siteName} style={{ height: '30px', objectFit: 'contain' }} />
             </div>
@@ -134,56 +107,50 @@ function OwnerPanel({ user, onLogout, settings }) {
             </button>
           </div>
         </div>
-      </div>
-      
-      {/* Sidebar Backdrop Overlay on mobile */}
-      {isSidebarOpen && (
-        <div 
-          onClick={() => setIsSidebarOpen(false)}
-          className="sidebar-backdrop"
-          style={{
-            position: 'fixed',
-            top: '62px',
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: 'rgba(0, 0, 0, 0.3)',
-            zIndex: 998,
-            backdropFilter: 'blur(2px)',
-            transition: 'opacity 0.3s ease'
-          }}
-        />
-      )}
+      </header>
 
-      <div className="panel-container" style={{ maxWidth: '1600px', margin: '2rem auto', padding: '0 2rem', gap: '2rem' }}>
+      {/* Main Layout Container */}
+      <div className="owner-container">
         
-        {/* Navigation Sidebar */}
-        <aside className={`panel-sidebar ${isSidebarOpen ? 'open' : ''} no-print`} style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-          <div style={{ 
-            backgroundColor: 'white', borderRadius: '16px', padding: '1rem', 
-            boxShadow: '0 10px 25px -5px rgba(0,0,0,0.02), 0 8px 10px -6px rgba(0,0,0,0.02)',
-            border: '1px solid rgba(226, 232, 240, 0.8)'
-          }}>
-            <NavItem to="/owner-panel" icon={FileSpreadsheet} label="Billing Portal" isActive={pathname === '/owner-panel'} />
-            <NavItem to="/owner-panel/stats" icon={BarChart3} label="Invoice Statistics" isActive={pathname === '/owner-panel/stats'} />
-            <NavItem to="/owner-panel/employees" icon={Users} label="Employee Management" isActive={pathname === '/owner-panel/employees'} />
-            <NavItem to="/owner-panel/cms" icon={Settings} label="Global Settings" isActive={pathname.startsWith('/owner-panel/cms')} />
+        {/* Navigation Sidebar (Desktop Only) */}
+        <aside className="owner-sidebar-desktop no-print">
+          <div className="owner-sidebar-card">
+            <NavItem to="/owner-panel" icon={FileSpreadsheet} label="Billing Portal" isActive={isBillingActive} />
+            <NavItem to="/owner-panel/stats" icon={BarChart3} label="Invoice Statistics" isActive={isStatsActive} />
+            <NavItem to="/owner-panel/employees" icon={Users} label="Employee Management" isActive={isEmployeesActive} />
+            <NavItem to="/owner-panel/cms" icon={Settings} label="Global Settings" isActive={isCmsActive} />
           </div>
         </aside>
 
         {/* Content Pane */}
-        <main className="panel-content-pane" style={{
-          backgroundColor: '#ffffff',
-          border: '1px solid rgba(226, 232, 240, 0.8)',
-          borderRadius: '16px',
-          boxShadow: '0 10px 25px -5px rgba(0,0,0,0.02), 0 8px 10px -6px rgba(0,0,0,0.02)',
-          padding: '2.5rem',
-          minHeight: '600px'
-        }}>
+        <main className="owner-content-pane">
           <Outlet />
         </main>
 
       </div>
+
+      {/* Mobile Bottom Navigation (Mobile Only) */}
+      <nav className="owner-bottom-nav no-print">
+        <div className="owner-bottom-nav-inner">
+          <Link to="/owner-panel" className={`owner-bottom-nav-item ${isBillingActive ? 'active' : ''}`}>
+            <FileSpreadsheet size={20} />
+            <span>Billing</span>
+          </Link>
+          <Link to="/owner-panel/stats" className={`owner-bottom-nav-item ${isStatsActive ? 'active' : ''}`}>
+            <BarChart3 size={20} />
+            <span>Stats</span>
+          </Link>
+          <Link to="/owner-panel/employees" className={`owner-bottom-nav-item ${isEmployeesActive ? 'active' : ''}`}>
+            <Users size={20} />
+            <span>Employees</span>
+          </Link>
+          <Link to="/owner-panel/cms" className={`owner-bottom-nav-item ${isCmsActive ? 'active' : ''}`}>
+            <Settings size={20} />
+            <span>Settings</span>
+          </Link>
+        </div>
+      </nav>
+
     </div>
   );
 }

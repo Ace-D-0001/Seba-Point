@@ -14,7 +14,7 @@ const invoiceSchema = new mongoose.Schema({
   issueDate: { type: Date, required: true, default: Date.now },
   dueDate: { type: Date, required: true },
   paymentTerms: { type: String, default: 'Due on Receipt' },
-  currency: { type: String, default: 'USD' },
+  currency: { type: String, default: 'BDT' },
   accentColor: { type: String, default: '#2563eb' }, // Dynamically style PDFs
   
   sender: {

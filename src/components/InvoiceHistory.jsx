@@ -7,7 +7,7 @@ function InvoiceHistory({ invoices, onEditInvoice, onRefresh }) {
   const [isUpdating, setIsUpdating] = useState(null);
 
   // Helper to format currency dynamically
-  const formatCurrency = (amount, currency = 'INR') => {
+  const formatCurrency = (amount, currency = 'BDT') => {
     const formatter = new Intl.NumberFormat('en-US', {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2

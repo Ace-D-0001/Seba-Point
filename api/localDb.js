@@ -2,17 +2,31 @@ import mongoose from 'mongoose';
 import fs from 'fs';
 import path from 'path';
 
-const DB_FILE = path.join(process.cwd(), 'local-db.json');
+const BUNDLED_DB_FILE = path.join(process.cwd(), 'local-db.json');
+const DB_FILE = process.env.VERCEL ? '/tmp/local-db.json' : BUNDLED_DB_FILE;
 
 // Helper to read JSON DB
 export function readDb() {
   if (!fs.existsSync(DB_FILE)) {
-    fs.writeFileSync(DB_FILE, JSON.stringify({
-      users: [],
-      services: [],
-      websettings: [],
-      invoices: []
-    }, null, 2));
+    // On Vercel, copy the pre-seeded local-db.json to /tmp if it exists
+    if (process.env.VERCEL && fs.existsSync(BUNDLED_DB_FILE)) {
+      try {
+        fs.copyFileSync(BUNDLED_DB_FILE, DB_FILE);
+      } catch (err) {
+        console.error('Failed to copy bundled local-db.json to /tmp:', err);
+      }
+    } else {
+      try {
+        fs.writeFileSync(DB_FILE, JSON.stringify({
+          users: [],
+          services: [],
+          websettings: [],
+          invoices: []
+        }, null, 2));
+      } catch (err) {
+        console.error('Failed to initialize empty local-db.json:', err);
+      }
+    }
   }
   try {
     return JSON.parse(fs.readFileSync(DB_FILE, 'utf8'));
@@ -23,7 +37,11 @@ export function readDb() {
 
 // Helper to write JSON DB
 export function writeDb(data) {
-  fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2));
+  try {
+    fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2));
+  } catch (err) {
+    console.error('Failed to write to local-db.json:', err);
+  }
 }
 
 export function activateLocalFallback() {

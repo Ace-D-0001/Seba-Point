@@ -3,7 +3,7 @@ import { BarChart3, Users, DollarSign, Award, Percent } from 'lucide-react';
 
 function InvoiceStatsTab({ invoices }) {
   // Helper to format currency dynamically
-  const formatCurrency = (amount, currency = 'INR') => {
+  const formatCurrency = (amount, currency = 'BDT') => {
     const formatter = new Intl.NumberFormat('en-US', {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2
@@ -120,7 +120,7 @@ function InvoiceStatsTab({ invoices }) {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '2.5rem' }}>
           
           {/* Key Metric cards */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1.5rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '1.5rem' }}>
             <div style={{ backgroundColor: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '1.5rem' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', color: '#64748b', marginBottom: '0.5rem' }}>
                 <span style={{ fontSize: '0.8rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Gross Billings</span>

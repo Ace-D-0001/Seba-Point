@@ -7,7 +7,7 @@ function BillingPortalTab({ invoices, totalRevenue, onEditInvoice, onRefresh }) 
   const [isUpdating, setIsUpdating] = useState(null);
 
   // Helper to format currency dynamically
-  const formatCurrency = (amount, currency = 'INR') => {
+  const formatCurrency = (amount, currency = 'BDT') => {
     const formatter = new Intl.NumberFormat('en-US', {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2
@@ -203,7 +203,7 @@ function BillingPortalTab({ invoices, totalRevenue, onEditInvoice, onRefresh }) 
       {/* 4-Column Business KPI metrics grid */}
       <div style={{ 
         display: 'grid', 
-        gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', 
+        gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', 
         gap: '1.5rem', 
         marginBottom: '2.5rem' 
       }}>

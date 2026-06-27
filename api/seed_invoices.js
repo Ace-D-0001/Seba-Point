@@ -8,8 +8,8 @@ async function generateFakeInvoices() {
     await mongoose.connect(MONGODB_URI);
     console.log('Connected to MongoDB');
     
-    // We want data from Oct 2025 to June 2026
-    const startDate = new Date(2025, 9, 1); // Oct 1, 2025
+    // We want data from Oct 2024 to June 2026
+    const startDate = new Date(2024, 9, 1); // Oct 1, 2024
     const endDate = new Date(2026, 5, 30); // June 30, 2026
     
     const statuses = ['Paid', 'Paid', 'Paid', 'Paid', 'Unpaid', 'Overdue'];
@@ -23,7 +23,7 @@ async function generateFakeInvoices() {
 
     const newInvoices = [];
     
-    let counter = 202510;
+    let counter = 202410;
     
     for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 7)) {
         // Generate an invoice every week approx

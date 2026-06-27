@@ -8,8 +8,9 @@ const DEFAULT_SENDER_KEY = 'seba_invoice_default_sender';
 const DRAFT_KEY = 'seba_invoice_form_draft';
 
 function InvoiceForm({ invoice, onSave, onCancel, invoices, settings }) {
-  // Determine if this invoice is finalized and locked
-  const isLocked = invoice && invoice.status !== 'Draft';
+  // Owner panel allows all invoices to be edited
+  const isLocked = false;
+  const isAlreadyFinalized = invoice && invoice.status !== 'Draft';
 
   const getInitialState = () => {
     const brandLogo = settings?.logo || '/logo.png';
@@ -376,8 +377,8 @@ function InvoiceForm({ invoice, onSave, onCancel, invoices, settings }) {
   return (
     <div className="invoice-editor-view">
       
-      {/* Locked Notice Banner */}
-      {isLocked && (
+      {/* Finalized Notice Banner */}
+      {isAlreadyFinalized && (
         <div style={{
           backgroundColor: '#eff6ff',
           border: '1px solid #bfdbfe',
@@ -390,8 +391,8 @@ function InvoiceForm({ invoice, onSave, onCancel, invoices, settings }) {
           gap: '0.75rem',
           fontWeight: 600
         }} className="no-print">
-          <Lock size={18} />
-          <span>This invoice is finalized and locked. You can view, print, or download PDF, but edits are disabled.</span>
+          <CheckCircle size={18} style={{ color: '#16a34a' }} />
+          <span>You are editing a finalized invoice. Saving changes will update the ledger balances directly.</span>
         </div>
       )}
 
@@ -399,9 +400,9 @@ function InvoiceForm({ invoice, onSave, onCancel, invoices, settings }) {
       <div className="sticky-action-bar no-print">
         <div className="page-title" style={{ margin: 0 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            {isLocked && <Lock size={20} style={{ color: '#64748b' }} />}
+            {isAlreadyFinalized && <CheckCircle size={20} style={{ color: '#16a34a' }} />}
             <h1 style={{ margin: 0, fontSize: '1.4rem' }}>
-              {invoice ? `${isLocked ? 'View' : 'Edit'} Invoice ${invoice.invoiceNumber}` : 'Create New Invoice'}
+              {invoice ? `Edit Invoice ${invoice.invoiceNumber}` : 'Create New Invoice'}
             </h1>
           </div>
         </div>
@@ -412,7 +413,18 @@ function InvoiceForm({ invoice, onSave, onCancel, invoices, settings }) {
             <span className="hidden-xs">Cancel</span>
           </button>
           
-          {!isLocked && (
+
+          {isAlreadyFinalized ? (
+            <button 
+              className="btn btn-primary" 
+              onClick={() => saveInvoiceToDatabase(invoiceData.status)}
+              disabled={isSaving}
+              style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', backgroundColor: '#16a34a', border: '1px solid #16a34a' }}
+            >
+              <Save size={16} />
+              <span>Save Changes</span>
+            </button>
+          ) : (
             <>
               <button 
                 className="btn btn-secondary" 

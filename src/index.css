@@ -1103,4 +1103,153 @@ html, body {
   }
 }
 
+/* ==========================================================================
+   Owner Panel Redesign (Premium & Responsive App Shell)
+   ========================================================================== */
+
+/* Shell Layout */
+.owner-shell {
+  min-height: 100vh;
+  background-color: #f8fafc;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header */
+.owner-header {
+  background: rgba(69, 10, 10, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: #ffffff;
+  padding: 0.85rem 2rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+
+.owner-header-inner {
+  max-width: 1600px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Owner Container */
+.owner-container {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  max-width: 1600px;
+  width: 100%;
+  margin: 2rem auto;
+  padding: 0 2rem;
+  gap: 2rem;
+  flex: 1;
+}
+
+/* Desktop Sidebar */
+.owner-sidebar-desktop {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.owner-sidebar-card {
+  background-color: #ffffff;
+  border-radius: 16px;
+  padding: 1rem;
+  box-shadow: 0 10px 25px -5px rgba(0,0,0,0.02), 0 8px 10px -6px rgba(0,0,0,0.02);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  position: sticky;
+  top: 90px;
+}
+
+/* Content Pane */
+.owner-content-pane {
+  background-color: #ffffff;
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  border-radius: 16px;
+  box-shadow: 0 10px 25px -5px rgba(0,0,0,0.02), 0 8px 10px -6px rgba(0,0,0,0.02);
+  padding: 2.5rem;
+  min-height: 600px;
+  min-width: 0;
+}
+
+/* Bottom Navigation Bar for Mobile */
+.owner-bottom-nav {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-top: 1px solid rgba(226, 232, 240, 0.8);
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
+  z-index: 1000;
+  padding: 0.5rem 0;
+}
+
+.owner-bottom-nav-inner {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.owner-bottom-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  text-decoration: none;
+  color: #64748b;
+  font-size: 0.7rem;
+  font-weight: 600;
+  transition: color 0.2s;
+  flex: 1;
+  text-align: center;
+}
+
+.owner-bottom-nav-item.active {
+  color: #ef4444;
+}
+
+/* Responsive adjustments for mobile viewport */
+@media (max-width: 768px) {
+  .owner-container {
+    grid-template-columns: 1fr !important;
+    padding: 0 1rem 5rem 1rem !important; /* extra bottom padding for bottom nav */
+    margin: 1rem auto !important;
+    gap: 1rem !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+  
+  .owner-sidebar-desktop {
+    display: none !important;
+  }
+  
+  .owner-bottom-nav {
+    display: block !important;
+  }
+  
+  .owner-content-pane {
+    padding: 1.25rem !important;
+    min-height: auto !important;
+    border-radius: 12px !important;
+  }
+  
+  .owner-header {
+    padding: 0.85rem 1rem !important;
+  }
+}
+
 

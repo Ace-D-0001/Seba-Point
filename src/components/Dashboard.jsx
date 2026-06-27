@@ -2,12 +2,25 @@ import React from 'react';
 import { DollarSign, Receipt, CreditCard, Clock, Plus, ArrowRight, Edit, Eye } from 'lucide-react';
 
 function Dashboard({ invoices, onCreateInvoice, onEditInvoice }) {
-  // Helper to format currency
-  const formatCurrency = (amount, currency = 'USD') => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: currency
-    }).format(amount);
+  const formatCurrency = (amount, currency = 'BDT') => {
+    const formatter = new Intl.NumberFormat('en-US', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    });
+    const formattedVal = formatter.format(amount);
+    
+    switch (currency) {
+      case 'BDT':
+        return `৳${formattedVal}`;
+      case 'INR':
+        return `₹${formattedVal}`;
+      case 'USD':
+        return `$${formattedVal}`;
+      case 'EUR':
+        return `€${formattedVal}`;
+      default:
+        return `${currency} ${formattedVal}`;
+    }
   };
 
   // Calculations

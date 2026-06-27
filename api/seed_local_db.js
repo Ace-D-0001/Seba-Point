@@ -16,7 +16,7 @@ function generateFakeInvoices() {
     
     if (!db.invoices) db.invoices = [];
     
-    const startDate = new Date(2025, 9, 1); // Oct 1, 2025
+    const startDate = new Date(2024, 9, 1); // Oct 1, 2024
     const endDate = new Date(2026, 5, 30); // June 30, 2026
     
     const statuses = ['Paid', 'Paid', 'Paid', 'Paid', 'Unpaid', 'Overdue'];
@@ -29,7 +29,7 @@ function generateFakeInvoices() {
     ];
 
     const newInvoices = [];
-    let counter = 202510;
+    let counter = 202410;
     
     for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 7)) {
         const itemsCount = Math.floor(Math.random() * 3) + 1;
